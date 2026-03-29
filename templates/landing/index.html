@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Lab — Where India's Next Generation Learns AI</title>
+    <meta name="description" content="Live Claude AI · 15+ Interactive Labs · Class 7–12 Curriculum · Python from basics to advanced. India's premier AI/ML learning platform for schools.">
+    {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+</head>
+<body>
+
+{% if request.GET.subscription == 'expired' %}
+<div id="sub-expired-banner" style="
+    background:linear-gradient(90deg,#c62828,#b71c1c);
+    color:#fff;text-align:center;padding:14px 20px;
+    font-size:14px;font-weight:600;position:relative;">
+  🔒 Your subscription has expired and your account has been logged out.
+  Please renew below to regain access.
+  &nbsp;&nbsp;
+  <a href="#pricing" style="color:#fff;text-decoration:underline;font-weight:800;">View Plans →</a>
+  <span onclick="this.parentElement.style.display='none';"
+        style="cursor:pointer;position:absolute;right:16px;top:50%;transform:translateY(-50%);opacity:0.8;font-size:18px;">✕</span>
+</div>
+<script>
+  // Auto-scroll to pricing if redirected here due to expiry
+  window.addEventListener('DOMContentLoaded', function(){
+    if(window.location.search.includes('subscription=expired')){
+      setTimeout(function(){
+        var el = document.getElementById('pricing');
+        if(el) el.scrollIntoView({behavior:'smooth'});
+      }, 600);
+    }
+  });
+</script>
+{% endif %}
+
+<!-- ═══════════════════════════════════════════════
+     TOP NAV
+═══════════════════════════════════════════════ -->
+<nav class="landing-nav">
+    <a href="/" class="nav-logo">
+        <div class="nav-logo-icon">🧠</div>
+        AI Lab
+    </a>
+    <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+        <a href="/login/" class="btn btn-outline">Login</a>
+        <a href="#pricing" class="btn btn-primary">Get Started</a>
+    </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════ -->
+<section class="hero-landing">
+    <div class="hero-badge">
+        <div class="pulse-dot"></div>
+        India's AI Learning Platform · Class 7–12
+    </div>
+    <h1>
+        Where India's Next<br>
+        Generation Learns <span class="grad">AI</span>
+    </h1>
+    <p class="hero-sub">
+        Live Claude AI &nbsp;·&nbsp; 15+ Interactive Labs &nbsp;·&nbsp; Class 7–12 Curriculum<br>
+        No app download. Pure browser. Loved by students, trusted by teachers.
+    </p>
+    <div class="hero-btns">
+        <a href="/register/" class="btn btn-green btn-lg">🚀 Start Free</a>
+        <a href="#pricing" class="btn btn-primary btn-lg">💳 View Pricing</a>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     STATS STRIP
+═══════════════════════════════════════════════ -->
+<div class="stats-strip">
+    <div class="stats-strip-inner">
+        <div class="stat-item"><div class="val">8</div><div class="lbl">AI Modules</div></div>
+        <div class="stat-item"><div class="val">15+</div><div class="lbl">Interactive Labs</div></div>
+        <div class="stat-item"><div class="val">100+</div><div class="lbl">AI Terms Covered</div></div>
+        <div class="stat-item"><div class="val">Live</div><div class="lbl">Claude AI Built-in</div></div>
+        <div class="stat-item"><div class="val">7–12</div><div class="lbl">Class Range</div></div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PROBLEM / SOLUTION
+═══════════════════════════════════════════════ -->
+<div class="section">
+    <div class="section-title">
+        <span class="eyebrow">The Problem</span>
+        <h2>AI is the skill India cannot afford to ignore</h2>
+        <p>Yet most students graduate without understanding the tools that will define their careers.</p>
+    </div>
+    <div class="problem-grid">
+        <div class="problem-card">
+            <div class="problem-icon">😕</div>
+            <h3>The Problem</h3>
+            <p>AI jobs are growing 40% year-on-year but students learn from 2010-era textbooks. There is no practical, hands-on AI curriculum built for Indian schools.</p>
+        </div>
+        <div class="problem-card">
+            <div class="problem-icon">🕳️</div>
+            <h3>The Gap</h3>
+            <p>YouTube videos are unstructured. Coaching apps are rote-learning focused. No platform brings it all together — and 1,000+ students have already used and tested this platform.</p>
+        </div>
+        <div class="problem-card" style="border-color: rgba(0,255,136,0.3);">
+            <div class="problem-icon">✅</div>
+            <h3>The Solution</h3>
+            <p>AI Lab gives every Class 7–12 student access to live Claude AI, 15+ interactive simulators, and a structured curriculum — all in a browser, starting at ₹799/month.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     FEATURES — MODULES
+═══════════════════════════════════════════════ -->
+<div id="features" class="section" style="padding-top: 0;">
+    <div class="section-title">
+        <span class="eyebrow">Learning Modules</span>
+        <h2>8 Modules. 0 Fluff.</h2>
+        <p>Each module is built with Indian curriculum standards in mind, from Class 7 Python foundations to Class 12 advanced AI systems.</p>
+    </div>
+    <div class="module-grid">
+        {% for module in modules %}
+        <div class="module-landing-card">
+            <div class="module-accent" style="background: {{ module.color|default:'#4d96ff' }};"></div>
+            <div class="module-body">
+                <span class="module-grade-pill">Class {{ module.grade_level }}</span>
+                <span class="module-tag-pill">{{ module.get_tag_display }}</span>
+                <div style="font-size: 32px; margin: 12px 0 8px; clear: both;">{{ module.icon }}</div>
+                <h3>{{ module.title }}</h3>
+                <p>{{ module.description|truncatewords:18 }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <!-- Fallback static cards if no modules in DB -->
+        {% for m in "1234567"|make_list %}
+        <div class="module-landing-card">
+            <div class="module-accent" style="background: #00ff88;"></div>
+            <div class="module-body">
+                <span class="module-tag-pill">Core</span>
+                <div style="font-size: 32px; margin: 12px 0 8px;">🧠</div>
+                <h3>AI Module {{ forloop.counter }}</h3>
+                <p>Interactive AI learning module with hands-on simulators and real Claude AI integration.</p>
+            </div>
+        </div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+
+    <div class="section-title" style="margin-top: 80px; margin-bottom: 40px;">
+        <span class="eyebrow">Interactive Labs</span>
+        <h2>15+ Labs. No Boring Theory.</h2>
+        <p>Students learn by doing — not watching.</p>
+    </div>
+    <div class="module-grid">
+        <div class="module-landing-card"><div class="module-accent" style="background:#00ff88;"></div><div class="module-body"><span class="module-tag-pill">Class 11–12</span><div style="font-size:32px;margin:12px 0 8px">⚡</div><h3>Neural Network Lab</h3><p>Build and visualize custom neural networks layer by layer. Run forward passes in real time.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#4d96ff;"></div><div class="module-body"><span class="module-tag-pill">Class 11–12</span><div style="font-size:32px;margin:12px 0 8px">🔍</div><h3>RAG Pipeline Visualizer</h3><p>Step through retrieval-augmented generation with real chunk scoring and vector similarity.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#ff8c00;"></div><div class="module-body"><span class="module-tag-pill">Class 12</span><div style="font-size:32px;margin:12px 0 8px">🤖</div><h3>Agent Flow Visualizer</h3><p>Watch multi-agent systems plan, execute tools, and reflect — step by step.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#b15eff;"></div><div class="module-body"><span class="module-tag-pill">Class 11–12</span><div style="font-size:32px;margin:12px 0 8px">🎛️</div><h3>LLM Parameters Lab</h3><p>Tune temperature, top-k, top-p and see instant quality/cost tradeoffs live.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#00e5ff;"></div><div class="module-body"><span class="module-tag-pill">Class 10–12</span><div style="font-size:32px;margin:12px 0 8px">🔵</div><h3>K-Means Clustering</h3><p>Drag data points, watch clusters form. Understand unsupervised learning visually.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#00ff88;"></div><div class="module-body"><span class="module-tag-pill">Class 10–12</span><div style="font-size:32px;margin:12px 0 8px">🌳</div><h3>Decision Tree Lab</h3><p>Build classification trees. See how algorithms split data at each node.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#ff6bca;"></div><div class="module-body"><span class="module-tag-pill">Class 11–12</span><div style="font-size:32px;margin:12px 0 8px">👁️</div><h3>Attention Mechanism</h3><p>Visualize self-attention heatmaps. Understand how Transformers focus on tokens.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><span class="module-tag-pill">Class 7</span><div style="font-size:32px;margin:12px 0 8px">🐍</div><h3>Python Basics</h3><p>Variables, data types, input/output, and first programs. The perfect starting point for Class 7 beginners.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><span class="module-tag-pill">Class 7</span><div style="font-size:32px;margin:12px 0 8px">🔁</div><h3>Python Control Flow</h3><p>If/else conditions, loops (for & while), and functions. Build real logic step by step.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><span class="module-tag-pill">Class 7</span><div style="font-size:32px;margin:12px 0 8px">📦</div><h3>Python Data Structures</h3><p>Lists, tuples, dictionaries, and sets — with hands-on exercises and live Python editor.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><span class="module-tag-pill">Class 7</span><div style="font-size:32px;margin:12px 0 8px">🧩</div><h3>Python Functions &amp; Modules</h3><p>Write reusable functions, import modules, and understand scope. Advanced concepts made simple.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><span class="module-tag-pill">Class 7</span><div style="font-size:32px;margin:12px 0 8px">📁</div><h3>Python File Handling &amp; OOP</h3><p>Read/write files, understand classes and objects. Complete Python foundation from basic to advanced.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#4d96ff;"></div><div class="module-body"><span class="module-tag-pill">Class 8–10</span><div style="font-size:32px;margin:12px 0 8px">🔌</div><h3>Logic Gates Lab</h3><p>Build digital logic circuits from scratch. The foundation of all computing.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#ff8c00;"></div><div class="module-body"><span class="module-tag-pill">Class 8–10</span><div style="font-size:32px;margin:12px 0 8px">📊</div><h3>Data Sorting Visualizer</h3><p>Watch bubble sort, merge sort, and quicksort in animated slow motion.</p></div></div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════════════════ -->
+<div id="how-it-works" class="section" style="background: var(--bg-secondary); max-width: 100%; padding: 100px 40px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <div class="section-title">
+            <span class="eyebrow">How It Works</span>
+            <h2>Up and running in under 10 minutes</h2>
+            <p>No IT team needed. No app downloads. Just a browser and a join code.</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <h3>School Signs Up</h3>
+                <p>Fill the inquiry form below. We set up your school's account within 24 hours and send login credentials to the principal or IT coordinator.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <h3>Students Join via Code</h3>
+                <p>Teacher shares an 8-character join code (e.g. AILAB8C3) on WhatsApp or classroom board. Students visit the link and are instantly enrolled.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <h3>Teacher Tracks Progress</h3>
+                <p>Real-time dashboard shows XP earned, modules completed, streaks, and a class leaderboard. Export CSV reports for PTMs in one click.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     COMPARISON TABLE
+═══════════════════════════════════════════════ -->
+<div class="section">
+    <div class="section-title">
+        <span class="eyebrow">Differentiators</span>
+        <h2>Why AI Lab wins</h2>
+        <p>Compare honestly — we did.</p>
+    </div>
+    <div style="overflow-x: auto;">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th class="highlight">AI Lab ✓</th>
+                    <th>YouTube / Tutorials</th>
+                    <th>Textbooks</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Live AI Chat (Claude)</td>
+                    <td class="highlight"><span class="check">✓</span> Real-time streaming</td>
+                    <td><span class="cross">✗</span> Pre-recorded only</td>
+                    <td><span class="cross">✗</span> None</td>
+                </tr>
+                <tr>
+                    <td>Interactive Simulators</td>
+                    <td class="highlight"><span class="check">✓</span> 15+ labs</td>
+                    <td><span class="cross">✗</span> Passive watching</td>
+                    <td><span class="cross">✗</span> Diagrams only</td>
+                </tr>
+                <tr>
+                    <td>Teacher Dashboard</td>
+                    <td class="highlight"><span class="check">✓</span> Real-time, per student</td>
+                    <td><span class="cross">✗</span> No visibility</td>
+                    <td><span class="cross">✗</span> Manual grading</td>
+                </tr>
+                <tr>
+                    <td>Grade-wise Curriculum</td>
+                    <td class="highlight"><span class="check">✓</span> Class 7–12 specific</td>
+                    <td><span class="partial">~</span> Generic content</td>
+                    <td><span class="partial">~</span> Outdated by 3–5 yrs</td>
+                </tr>
+                <tr>
+                    <td>Gamification (XP, Badges)</td>
+                    <td class="highlight"><span class="check">✓</span> Built-in</td>
+                    <td><span class="cross">✗</span> None</td>
+                    <td><span class="cross">✗</span> None</td>
+                </tr>
+                <tr>
+                    <td>App Download Required</td>
+                    <td class="highlight"><span class="check">✓</span> Browser only</td>
+                    <td><span class="partial">~</span> App + data use</td>
+                    <td><span class="check">✓</span> None</td>
+                </tr>
+                <tr>
+                    <td>Price per Student / Year</td>
+                    <td class="highlight" style="color: var(--accent-green); font-weight: 700;">₹799/month or ₹1,999/3 months</td>
+                    <td>Free but unstructured</td>
+                    <td>₹400–800 per book</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PRICING
+═══════════════════════════════════════════════ -->
+<div id="pricing" class="section" style="background: var(--bg-secondary); max-width: 100%; padding: 100px 40px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <div class="section-title">
+            <span class="eyebrow">Pricing</span>
+            <h2>Simple, honest pricing</h2>
+            <p>No hidden fees. Cancel anytime. Discounts for large schools.</p>
+        </div>
+        <div class="pricing-grid">
+            <!-- Monthly Plan -->
+            <div class="pricing-card featured">
+                <div class="pricing-badge">Most Popular</div>
+                <div class="pricing-label">Monthly Plan</div>
+                <div class="pricing-price"><span class="currency">₹</span>799<span class="period">/mo</span></div>
+                <div class="pricing-sub">Flexible monthly access · Cancel anytime</div>
+                <ul class="pricing-features">
+                    <li>Full access to all modules (Class 7–12)</li>
+                    <li>Python basics to advanced (Class 7)</li>
+                    <li>15+ interactive labs</li>
+                    <li>Live Claude AI chat</li>
+                    <li>XP, badges &amp; leaderboard</li>
+                    <li>Learning path tracking</li>
+                </ul>
+                <a href="/register/" class="btn btn-green" style="width:100%; justify-content:center;">Get Started — ₹799/mo</a>
+            </div>
+            <!-- 3-Month Plan -->
+            <div class="pricing-card">
+                <div class="pricing-label">3-Month Plan</div>
+                <div class="pricing-price"><span class="currency">₹</span>1,999<span class="period">/3 mo</span></div>
+                <div class="pricing-sub">Save ₹398 vs monthly · 3-month access</div>
+                <ul class="pricing-features">
+                    <li>Full access to all modules (Class 7–12)</li>
+                    <li>Python basics to advanced (Class 7)</li>
+                    <li>15+ interactive labs</li>
+                    <li>Live Claude AI chat</li>
+                    <li>XP, badges &amp; leaderboard</li>
+                    <li>Learning path tracking</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="/register/" class="btn btn-outline" style="width:100%; justify-content:center;">Get Started — ₹1,999/3 mo</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCHOOL INQUIRY FORM
+═══════════════════════════════════════════════ -->
+<div id="inquiry" class="inquiry-section">
+    <div class="section">
+        <div class="section-title">
+            <span class="eyebrow">Get Started</span>
+            <h2>Get Your School on AI Lab</h2>
+            <p>Fill in the form and we'll get your school set up within 24 hours.</p>
+        </div>
+        <div class="inquiry-form">
+            {% if messages %}
+            <div style="background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); border-radius: 10px; padding: 16px 20px; margin-bottom: 24px; color: var(--accent-green); font-weight: 600;">
+                {% for message in messages %}{{ message }}{% endfor %}
+            </div>
+            {% endif %}
+            <form method="POST" action="/#inquiry">
+                {% csrf_token %}
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="id_school_name">School Name *</label>
+                        {{ form.school_name }}
+                        {% if form.school_name.errors %}<div class="form-error">{{ form.school_name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_city">City *</label>
+                        {{ form.city }}
+                        {% if form.city.errors %}<div class="form-error">{{ form.city.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_contact_name">Your Name *</label>
+                        {{ form.contact_name }}
+                        {% if form.contact_name.errors %}<div class="form-error">{{ form.contact_name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_contact_phone">Phone Number *</label>
+                        {{ form.contact_phone }}
+                        {% if form.contact_phone.errors %}<div class="form-error">{{ form.contact_phone.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_contact_email">Email Address *</label>
+                        {{ form.contact_email }}
+                        {% if form.contact_email.errors %}<div class="form-error">{{ form.contact_email.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_student_count">Number of Students *</label>
+                        {{ form.student_count }}
+                        {% if form.student_count.errors %}<div class="form-error">{{ form.student_count.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="form-group full">
+                        <label for="id_interested_plan">Interested In *</label>
+                        {{ form.interested_plan }}
+                        {% if form.interested_plan.errors %}<div class="form-error">{{ form.interested_plan.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="form-group full">
+                        <label for="id_message">Message (optional)</label>
+                        {{ form.message }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">
+                    🏫 Submit Inquiry — We'll contact you within 24 hrs
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     FAQ
+═══════════════════════════════════════════════ -->
+<div id="faq" class="section">
+    <div class="section-title">
+        <span class="eyebrow">FAQ</span>
+        <h2>Common questions</h2>
+    </div>
+    <div class="faq-list">
+        {% for q, a in faq_items %}
+        <div class="faq-item">
+            <input type="checkbox" class="faq-toggle" id="faq{{ forloop.counter }}">
+            <label class="faq-question" for="faq{{ forloop.counter }}">
+                <span>{{ q }}</span>
+                <span class="faq-chevron">+</span>
+            </label>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">{{ a }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════ -->
+<footer class="landing-footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+                <div class="nav-logo-icon">🧠</div>
+                <span style="font-size:18px;font-weight:800;">AI Lab</span>
+            </div>
+            <p>India's first interactive AI/ML learning platform built for Class 7–12 students. Live Claude AI, 15+ simulators, Python courses, and real teacher dashboards.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Platform</h4>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="/login/">Student Login</a></li>
+                <li><a href="/register/">Register Free</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Contact</h4>
+            <ul>
+                <li><a href="mailto:hello@ailab.in">hello@ailab.in</a></li>
+                <li><a href="https://wa.me/919876543210">WhatsApp Us</a></li>
+                <li><a href="#inquiry">Contact Us</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>© 2026 AI Lab. Built for Indian schools. 🇮🇳</span>
+        <span>Privacy · Terms</span>
+    </div>
+</footer>
+
+</body>
+</html>
