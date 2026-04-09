@@ -184,16 +184,66 @@
 }
 
 .module-visual {
-    width: 64px;
-    height: 64px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 18px;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
     margin-bottom: 24px;
+    color: #fff;
+}
+.module-visual svg {
+    width: 26px;
+    height: 26px;
+    stroke: #fff;
+    stroke-width: 1.75;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Lab cards */
+.lab-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: block;
+}
+.lab-card:hover { border-color: var(--accent-green); }
+
+.lab-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: #fff;
+}
+.lab-icon-wrap svg {
+    width: 22px;
+    height: 22px;
+    stroke: #fff;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.lab-name {
+    font-weight: 800;
+    font-size: 17px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+.lab-desc {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 .module-premium-card h3 {
@@ -354,7 +404,7 @@
                         <span class="module-grade">Class {{ module.grade_level }}</span>
                         {% endif %}
                     </div>
-                    <div style="width:56px;height:56px;border-radius:14px;background:{{ module.color|default:'#4d96ff' }};opacity:0.85;margin-bottom:24px;"></div>
+                    <div class="module-visual" style="background:{{ module.color|default:'#4d96ff' }};"><i data-lucide="{{ module.lucide_icon }}"></i></div>
                     <h3>{{ module.title }}</h3>
                     <p>{{ module.description|truncatewords:20 }}</p>
                 </div>
@@ -378,14 +428,10 @@
 
         <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-bottom: 60px;">
             {% for lab in labs %}
-            <a href="{{ lab.url }}" data-animate
-                style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; text-decoration: none; transition: all 0.3s ease; display: block;"
-                class="card-hover-lift"
-                onmouseenter="this.style.borderColor='var(--accent-green)'"
-                onmouseleave="this.style.borderColor='var(--border)'">
-                <div style="width:48px;height:48px;border-radius:12px;background:{{ lab.color }};display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;margin-bottom:20px;letter-spacing:0.03em;">{{ lab.icon }}</div>
-                <div style="font-weight: 800; font-size: 18px; color: var(--text-primary); margin-bottom: 8px;">{{ lab.name }}</div>
-                <div style="color: var(--text-secondary); font-size: 14px; line-height: 1.5;">{{ lab.desc }}</div>
+            <a href="{{ lab.url }}" data-animate class="lab-card card-hover-lift">
+                <div class="lab-icon-wrap" style="background:{{ lab.color }};"><i data-lucide="{{ lab.icon }}"></i></div>
+                <div class="lab-name">{{ lab.name }}</div>
+                <div class="lab-desc">{{ lab.desc }}</div>
             </a>
             {% endfor %}
         </div>
@@ -491,14 +537,10 @@
 
 <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-bottom: 100px;">
     {% for lab in labs %}
-    <a href="{{ lab.url }}" data-animate
-        style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; text-decoration: none; transition: all 0.3s ease; display: block;"
-        class="card-hover-lift"
-        onmouseenter="this.style.borderColor='var(--accent-green)'"
-        onmouseleave="this.style.borderColor='var(--border)'">
-        <div style="width:48px;height:48px;border-radius:12px;background:{{ lab.color }};display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;margin-bottom:20px;letter-spacing:0.03em;">{{ lab.icon }}</div>
-        <div style="font-weight: 800; font-size: 18px; color: var(--text-primary); margin-bottom: 8px;">{{ lab.name }}</div>
-        <div style="color: var(--text-secondary); font-size: 14px; line-height: 1.5;">{{ lab.desc }}</div>
+    <a href="{{ lab.url }}" data-animate class="lab-card card-hover-lift">
+        <div class="lab-icon-wrap" style="background:{{ lab.color }};"><i data-lucide="{{ lab.icon }}"></i></div>
+        <div class="lab-name">{{ lab.name }}</div>
+        <div class="lab-desc">{{ lab.desc }}</div>
     </a>
     {% endfor %}
 </div>

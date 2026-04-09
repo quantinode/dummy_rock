@@ -48,7 +48,7 @@
 <nav class="landing-nav">
     <a href="/" class="nav-logo">
         <div class="nav-logo-icon" style="background:linear-gradient(135deg,#1565c0,#00a854);color:#fff;font-weight:900;font-size:14px;letter-spacing:-0.5px;">QN</div>
-        Quantinodes
+        <span class="nav-logo-text">Quantinodes</span>
     </a>
     <ul class="nav-links">
         <li><a href="#features">Features</a></li>
@@ -66,11 +66,8 @@
      HERO
 ═══════════════════════════════════════════════ -->
 
-<!-- Image Banner -->
-<div class="hero-image-banner"></div>
-
-<!-- CTA Section — below image on clean light background -->
-<section class="hero-cta-section">
+<!-- Hero — image + text overlaid -->
+<section class="hero-cta-section hero-image-banner">
     <div class="hero-badge">
         <div class="pulse-dot"></div>
         India's AI Platform for Class 7–12
@@ -148,7 +145,7 @@
         <div class="module-landing-card">
             <div class="module-accent" style="background: {{ module.color|default:'#4d96ff' }};"></div>
             <div class="module-body">
-                <div style="margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                <div class="module-pill-row">
                     <span class="module-grade-pill">Class {{ module.grade_level }}</span>
                     <span class="module-tag-pill">{{ module.get_tag_display }}</span>
                 </div>
@@ -178,20 +175,20 @@
         <p>Students learn by doing — not watching.</p>
     </div>
     <div class="module-grid">
-        <div class="module-landing-card"><div class="module-accent" style="background:#00a854;"></div><div class="module-body"><span class="module-tag-pill">Class 11–12</span><h3>Neural Network Lab</h3><p>Build and visualize custom neural networks layer by layer. Run forward passes in real time.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#4d96ff;"></div><div class="module-body"><span class="module-tag-pill">Class 11–12</span><h3>RAG Pipeline Visualizer</h3><p>Step through retrieval-augmented generation with real chunk scoring and vector similarity.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#ff8c00;"></div><div class="module-body"><span class="module-tag-pill">Class 12</span><h3>Agent Flow Visualizer</h3><p>Watch multi-agent systems plan, execute tools, and reflect — step by step.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#b15eff;"></div><div class="module-body"><span class="module-tag-pill">Class 11–12</span><h3>LLM Parameters Lab</h3><p>Tune temperature, top-k, top-p and see instant quality/cost tradeoffs live.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#00e5ff;"></div><div class="module-body"><span class="module-tag-pill">Class 10–12</span><h3>K-Means Clustering</h3><p>Drag data points, watch clusters form. Understand unsupervised learning visually.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#00a854;"></div><div class="module-body"><span class="module-tag-pill">Class 10–12</span><h3>Decision Tree Lab</h3><p>Build classification trees. See how algorithms split data at each node.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#ff6bca;"></div><div class="module-body"><span class="module-tag-pill">Class 11–12</span><h3>Attention Mechanism</h3><p>Visualize self-attention heatmaps. Understand how Transformers focus on tokens.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><span class="module-tag-pill">Class 7</span><h3>Python Basics</h3><p>Variables, data types, input/output, and first programs. The perfect starting point for Class 7 beginners.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><span class="module-tag-pill">Class 7</span><h3>Python Control Flow</h3><p>If/else conditions, loops (for &amp; while), and functions. Build real logic step by step.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><span class="module-tag-pill">Class 7</span><h3>Python Data Structures</h3><p>Lists, tuples, dictionaries, and sets — with hands-on exercises and live Python editor.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><span class="module-tag-pill">Class 7</span><h3>Python Functions &amp; Modules</h3><p>Write reusable functions, import modules, and understand scope. Advanced concepts made simple.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><span class="module-tag-pill">Class 7</span><h3>Python File Handling &amp; OOP</h3><p>Read/write files, understand classes and objects. Complete Python foundation from basic to advanced.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#4d96ff;"></div><div class="module-body"><span class="module-tag-pill">Class 8–10</span><h3>Logic Gates Lab</h3><p>Build digital logic circuits from scratch. The foundation of all computing.</p></div></div>
-        <div class="module-landing-card"><div class="module-accent" style="background:#ff8c00;"></div><div class="module-body"><span class="module-tag-pill">Class 8–10</span><h3>Data Sorting Visualizer</h3><p>Watch bubble sort, merge sort, and quicksort in animated slow motion.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#00a854;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 11–12</span></div><h3>Neural Network Lab</h3><p>Build and visualize custom neural networks layer by layer. Run forward passes in real time.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#4d96ff;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 11–12</span></div><h3>RAG Pipeline Visualizer</h3><p>Step through retrieval-augmented generation with real chunk scoring and vector similarity.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#ff8c00;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 12</span></div><h3>Agent Flow Visualizer</h3><p>Watch multi-agent systems plan, execute tools, and reflect — step by step.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#b15eff;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 11–12</span></div><h3>LLM Parameters Lab</h3><p>Tune temperature, top-k, top-p and see instant quality/cost tradeoffs live.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#00e5ff;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 10–12</span></div><h3>K-Means Clustering</h3><p>Drag data points, watch clusters form. Understand unsupervised learning visually.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#00a854;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 10–12</span></div><h3>Decision Tree Lab</h3><p>Build classification trees. See how algorithms split data at each node.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#ff6bca;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 11–12</span></div><h3>Attention Mechanism</h3><p>Visualize self-attention heatmaps. Understand how Transformers focus on tokens.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 7</span></div><h3>Python Basics</h3><p>Variables, data types, input/output, and first programs. The perfect starting point for Class 7 beginners.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 7</span></div><h3>Python Control Flow</h3><p>If/else conditions, loops (for &amp; while), and functions. Build real logic step by step.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 7</span></div><h3>Python Data Structures</h3><p>Lists, tuples, dictionaries, and sets — with hands-on exercises and live Python editor.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 7</span></div><h3>Python Functions &amp; Modules</h3><p>Write reusable functions, import modules, and understand scope. Advanced concepts made simple.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#9EC6F3;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 7</span></div><h3>Python File Handling &amp; OOP</h3><p>Read/write files, understand classes and objects. Complete Python foundation from basic to advanced.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#4d96ff;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 8–10</span></div><h3>Logic Gates Lab</h3><p>Build digital logic circuits from scratch. The foundation of all computing.</p></div></div>
+        <div class="module-landing-card"><div class="module-accent" style="background:#ff8c00;"></div><div class="module-body"><div class="module-pill-row"><span class="module-tag-pill">Class 8–10</span></div><h3>Data Sorting Visualizer</h3><p>Watch bubble sort, merge sort, and quicksort in animated slow motion.</p></div></div>
     </div>
 </div>
 
