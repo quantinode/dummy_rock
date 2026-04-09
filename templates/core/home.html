@@ -285,6 +285,26 @@
 <div class="dashboard-grid">
     <!-- LEFT COLUMN (main content) -->
     <div>
+
+        <!-- Personalized Greeting -->
+        <div style="background:linear-gradient(135deg,rgba(0,168,84,0.08),rgba(21,101,192,0.08));border:1px solid var(--border);border-radius:20px;padding:28px 32px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+            <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Welcome back</div>
+                <div style="font-size:26px;font-weight:800;color:var(--text-primary);line-height:1.2;">
+                    {% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.username }}{% endif %}
+                    <span id="greeting-emoji" style="font-size:22px;"></span>
+                </div>
+                {% if request.user.grade_level %}
+                <div style="margin-top:6px;font-size:13px;color:var(--text-secondary);">Class {{ request.user.grade_level }} &nbsp;·&nbsp; Keep learning, you're doing great!</div>
+                {% else %}
+                <div style="margin-top:6px;font-size:13px;color:var(--text-secondary);">Ready to learn something new today?</div>
+                {% endif %}
+            </div>
+            <a href="/dashboard/ai-chat/" style="display:inline-flex;align-items:center;gap:8px;background:var(--accent-green);color:#fff;font-weight:700;font-size:13px;padding:10px 20px;border-radius:10px;text-decoration:none;white-space:nowrap;">
+                Ask AI Assistant
+            </a>
+        </div>
+
         {% include "core/partials/continue_learning.html" %}
 
         <div class="stats-grid">
@@ -312,13 +332,13 @@
         </div>
 
         <div class="grade-selector">
-            <a href="/" class="grade-option {% if not current_grade %}active{% endif %}">General</a>
-            <a href="/?grade=7" class="grade-option {% if current_grade == '7' %}active{% endif %}">Class 7</a>
-            <a href="/?grade=8" class="grade-option {% if current_grade == '8' %}active{% endif %}">Class 8</a>
-            <a href="/?grade=9" class="grade-option {% if current_grade == '9' %}active{% endif %}">Class 9</a>
-            <a href="/?grade=10" class="grade-option {% if current_grade == '10' %}active{% endif %}">Class 10</a>
-            <a href="/?grade=11" class="grade-option {% if current_grade == '11' %}active{% endif %}">Class 11</a>
-            <a href="/?grade=12" class="grade-option {% if current_grade == '12' %}active{% endif %}">Class 12</a>
+            <a href="/dashboard/" class="grade-option {% if not current_grade %}active{% endif %}">All Classes</a>
+            <a href="/dashboard/?grade=7" class="grade-option {% if current_grade == '7' %}active{% endif %}">Class 7</a>
+            <a href="/dashboard/?grade=8" class="grade-option {% if current_grade == '8' %}active{% endif %}">Class 8</a>
+            <a href="/dashboard/?grade=9" class="grade-option {% if current_grade == '9' %}active{% endif %}">Class 9</a>
+            <a href="/dashboard/?grade=10" class="grade-option {% if current_grade == '10' %}active{% endif %}">Class 10</a>
+            <a href="/dashboard/?grade=11" class="grade-option {% if current_grade == '11' %}active{% endif %}">Class 11</a>
+            <a href="/dashboard/?grade=12" class="grade-option {% if current_grade == '12' %}active{% endif %}">Class 12</a>
         </div>
 
         <div class="module-premium-grid">
@@ -334,7 +354,7 @@
                         <span class="module-grade">Class {{ module.grade_level }}</span>
                         {% endif %}
                     </div>
-                    <div class="module-visual">{{ module.icon }}</div>
+                    <div style="width:56px;height:56px;border-radius:14px;background:{{ module.color|default:'#4d96ff' }};opacity:0.85;margin-bottom:24px;"></div>
                     <h3>{{ module.title }}</h3>
                     <p>{{ module.description|truncatewords:20 }}</p>
                 </div>
@@ -345,9 +365,8 @@
             </div>
             {% empty %}
             <div style="grid-column: 1/-1; text-align: center; padding: 100px; color: var(--text-muted);">
-                <div style="font-size: 48px; margin-bottom: 20px;">🔋</div>
-                <div style="font-size: 20px; font-weight: 700;">No Modules Found</div>
-                <p>Try clearing your filters or running the seed script.</p>
+                <div style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">No Modules Found</div>
+                <p>Try selecting a different class or contact support.</p>
             </div>
             {% endfor %}
         </div>
@@ -364,7 +383,7 @@
                 class="card-hover-lift"
                 onmouseenter="this.style.borderColor='var(--accent-green)'"
                 onmouseleave="this.style.borderColor='var(--border)'">
-                <div style="font-size: 40px; margin-bottom: 20px;">{{ lab.icon }}</div>
+                <div style="width:48px;height:48px;border-radius:12px;background:{{ lab.color }};display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;margin-bottom:20px;letter-spacing:0.03em;">{{ lab.icon }}</div>
                 <div style="font-weight: 800; font-size: 18px; color: var(--text-primary); margin-bottom: 8px;">{{ lab.name }}</div>
                 <div style="color: var(--text-secondary); font-size: 14px; line-height: 1.5;">{{ lab.desc }}</div>
             </a>
@@ -395,8 +414,8 @@
         <h1>AI Lab<br><span>The Future of Learning</span></h1>
         <p>Master Artificial Intelligence through high-fidelity simulations, guided learning paths, and real-world experiments.</p>
         <div class="hero-btns">
-            <a href="/register/" class="btn btn-green" style="padding: 16px 32px; font-size: 16px;">🚀 Start Free</a>
-            <a href="/" class="btn btn-secondary" style="padding: 16px 32px; font-size: 16px;">🏫 For Schools</a>
+            <a href="/register/" class="btn btn-green" style="padding: 16px 32px; font-size: 16px;">Start Free</a>
+            <a href="/" class="btn btn-secondary" style="padding: 16px 32px; font-size: 16px;">For Schools</a>
         </div>
     </div>
 </div>
@@ -426,13 +445,13 @@
 </div>
 
 <div class="grade-selector">
-    <a href="/" class="grade-option {% if not current_grade %}active{% endif %}">General</a>
-    <a href="/?grade=7" class="grade-option {% if current_grade == '7' %}active{% endif %}">Class 7</a>
-    <a href="/?grade=8" class="grade-option {% if current_grade == '8' %}active{% endif %}">Class 8</a>
-    <a href="/?grade=9" class="grade-option {% if current_grade == '9' %}active{% endif %}">Class 9</a>
-    <a href="/?grade=10" class="grade-option {% if current_grade == '10' %}active{% endif %}">Class 10</a>
-    <a href="/?grade=11" class="grade-option {% if current_grade == '11' %}active{% endif %}">Class 11</a>
-    <a href="/?grade=12" class="grade-option {% if current_grade == '12' %}active{% endif %}">Class 12</a>
+    <a href="/dashboard/" class="grade-option {% if not current_grade %}active{% endif %}">All Classes</a>
+    <a href="/dashboard/?grade=7" class="grade-option {% if current_grade == '7' %}active{% endif %}">Class 7</a>
+    <a href="/dashboard/?grade=8" class="grade-option {% if current_grade == '8' %}active{% endif %}">Class 8</a>
+    <a href="/dashboard/?grade=9" class="grade-option {% if current_grade == '9' %}active{% endif %}">Class 9</a>
+    <a href="/dashboard/?grade=10" class="grade-option {% if current_grade == '10' %}active{% endif %}">Class 10</a>
+    <a href="/dashboard/?grade=11" class="grade-option {% if current_grade == '11' %}active{% endif %}">Class 11</a>
+    <a href="/dashboard/?grade=12" class="grade-option {% if current_grade == '12' %}active{% endif %}">Class 12</a>
 </div>
 
 <div class="module-premium-grid">
@@ -448,7 +467,7 @@
                 <span class="module-grade">Class {{ module.grade_level }}</span>
                 {% endif %}
             </div>
-            <div class="module-visual">{{ module.icon }}</div>
+            <div style="width:56px;height:56px;border-radius:14px;background:{{ module.color|default:'#4d96ff' }};opacity:0.85;margin-bottom:24px;"></div>
             <h3>{{ module.title }}</h3>
             <p>{{ module.description|truncatewords:20 }}</p>
         </div>
@@ -459,9 +478,8 @@
     </div>
     {% empty %}
     <div style="grid-column: 1/-1; text-align: center; padding: 100px; color: var(--text-muted);">
-        <div style="font-size: 48px; margin-bottom: 20px;">🔋</div>
-        <div style="font-size: 20px; font-weight: 700;">No Modules Found</div>
-        <p>Try clearing your filters or running the seed script.</p>
+        <div style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">No Modules Found</div>
+        <p>Try selecting a different class or contact support.</p>
     </div>
     {% endfor %}
 </div>
@@ -478,11 +496,25 @@
         class="card-hover-lift"
         onmouseenter="this.style.borderColor='var(--accent-green)'"
         onmouseleave="this.style.borderColor='var(--border)'">
-        <div style="font-size: 40px; margin-bottom: 20px;">{{ lab.icon }}</div>
+        <div style="width:48px;height:48px;border-radius:12px;background:{{ lab.color }};display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;margin-bottom:20px;letter-spacing:0.03em;">{{ lab.icon }}</div>
         <div style="font-weight: 800; font-size: 18px; color: var(--text-primary); margin-bottom: 8px;">{{ lab.name }}</div>
         <div style="color: var(--text-secondary); font-size: 14px; line-height: 1.5;">{{ lab.desc }}</div>
     </a>
     {% endfor %}
 </div>
 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Set time-based greeting emoji
+(function(){
+    var h = new Date().getHours();
+    var el = document.getElementById('greeting-emoji');
+    if (!el) return;
+    if (h < 12) el.textContent = ' — Good morning!';
+    else if (h < 17) el.textContent = ' — Good afternoon!';
+    else el.textContent = ' — Good evening!';
+})();
+</script>
 {% endblock %}
