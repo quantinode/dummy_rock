@@ -46,6 +46,7 @@ class Module(models.Model):
     grade_level = models.CharField(max_length=5, choices=GRADE_CHOICES, default='all')
     prerequisites = models.TextField(blank=True, help_text='Prerequisite modules or knowledge')
     learning_objectives = models.TextField(blank=True, help_text='What students will learn (one per line)')
+    video_url = models.URLField(max_length=500, blank=True, help_text='YouTube embed URL or direct video URL for the module intro video')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

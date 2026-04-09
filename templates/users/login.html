@@ -107,7 +107,7 @@
           display:inline-block;background:#c62828;color:#fff;font-weight:700;
           font-size:14px;padding:12px 28px;border-radius:10px;
           text-decoration:none;">
-        🔄 View Renewal Plans →
+        View Renewal Plans →
       </a>
     </div>
     {% endif %}
@@ -127,6 +127,9 @@
       <button type="submit" class="btn-login">Sign In</button>
     </form>
 
+    <p class="switch-link" style="margin-top:16px;">
+      <a href="{% url 'password_reset' %}" style="color:var(--text-muted);font-size:0.85rem;">Forgot password?</a>
+    </p>
     <p class="switch-link">Don't have an account? <a href="{% url 'register_page' %}">Sign up</a></p>
   </div>
 </div>
