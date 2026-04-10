@@ -1,40 +1,26 @@
 from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.conf import settings
 from .forms import SchoolInquiryForm
 from .models import SchoolInquiry
 from modules.models import Module
 
 FAQ_ITEMS = [
     (
-        "Is there a free trial for schools?",
-        "Yes. We offer a 14-day full-access trial for up to 10 students — no credit card required. Book a demo and we'll set it up within 24 hours."
+        "Does my child need prior coding knowledge?",
+        "Not at all. Class 7 starts with Python basics from scratch. Class 8–10 begins with logic and patterns. Every track is designed for complete beginners."
     ),
     (
-        "How do students join a classroom?",
-        "Teachers share an 8-character join code (e.g. AILAB8C3) via WhatsApp or on the board. Students visit the join URL on any browser — no app download needed."
+        "How do students join?",
+        "The teacher shares a simple join code on WhatsApp or the classroom board. Students open it in any browser — no app download, no setup."
     ),
     (
-        "Which boards / curricula does AI Lab follow?",
-        "Content is aligned with CBSE and ICSE frameworks and maps to the emerging AI curriculum guidelines from NEP 2020. State board schools also find the content directly applicable."
+        "Is it aligned with CBSE / ICSE?",
+        "Yes. Content maps to CBSE, ICSE, and NEP 2020 AI curriculum guidelines. State board schools also find it directly applicable."
     ),
     (
-        "Do students need any prior coding knowledge?",
-        "No. Class 8–10 tracks start from absolute basics (logic gates, patterns, sorting). Coding concepts are introduced gradually. Class 11–12 tracks go into practical AI implementation."
-    ),
-    (
-        "How is progress tracked?",
-        "Teachers get a real-time dashboard showing XP earned, modules completed, streaks, and assignment completion per student. Reports can be exported to CSV in one click."
-    ),
-    (
-        "What is the Claude AI integration?",
-        "Students can chat live with Anthropic's Claude AI model — the same technology powering enterprise AI tools. This is not a chatbot; it's the real thing, contextualised for learning."
-    ),
-    (
-        "Can we customize the content for our school?",
-        "Enterprise plans include custom module content and the ability to add school-specific case studies. School-plan customers can request content additions via WhatsApp support."
-    ),
-    (
-        "What payment methods are accepted?",
-        "We accept bank transfer (NEFT/RTGS), UPI, and Razorpay payment links. Schools can request a GST invoice. No international card required."
+        "How do we pay?",
+        "UPI, NEFT/RTGS, or Razorpay link. GST invoice provided. No international card needed."
     ),
 ]
 
@@ -46,7 +32,28 @@ def landing_page(request):
     if request.method == 'POST':
         form = SchoolInquiryForm(request.POST)
         if form.is_valid():
-            form.save()
+            inquiry = form.save()
+            # Notify Quantinodes team about new school inquiry
+            try:
+                send_mail(
+                    subject=f'New School Inquiry — {inquiry.school_name} ({inquiry.city})',
+                    message=(
+                        f'New school inquiry received on Quantinodes.\n\n'
+                        f'School: {inquiry.school_name}\n'
+                        f'City: {inquiry.city}\n'
+                        f'Contact: {inquiry.contact_name}\n'
+                        f'Phone: {inquiry.contact_phone}\n'
+                        f'Email: {inquiry.contact_email}\n'
+                        f'Students: {inquiry.student_count}\n'
+                        f'Plan Interest: {inquiry.interested_plan}\n'
+                        f'Message: {inquiry.message or "—"}\n'
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=['quantinodes@gmail.com', 'info@quantinodes.com'],
+                    fail_silently=True,
+                )
+            except Exception:
+                pass
             return redirect('/thank-you/')
     else:
         form = SchoolInquiryForm()

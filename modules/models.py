@@ -46,10 +46,32 @@ class Module(models.Model):
     grade_level = models.CharField(max_length=5, choices=GRADE_CHOICES, default='all')
     prerequisites = models.TextField(blank=True, help_text='Prerequisite modules or knowledge')
     learning_objectives = models.TextField(blank=True, help_text='What students will learn (one per line)')
+    video_url = models.URLField(max_length=500, blank=True, help_text='YouTube embed URL or direct video URL for the module intro video')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['order']
+
+    _SLUG_ICON_MAP = {
+        'ai-basics': 'sparkles',
+        'machine-learning-deep-dive': 'cpu',
+        'deep-learning-lab': 'layers',
+        'generative-ai': 'wand-2',
+        'llm-systems': 'bot',
+        'agentic-ai': 'workflow',
+        'ai-playground': 'terminal',
+        'how-computers-think': 'binary',
+        'data-patterns': 'bar-chart-2',
+        'introduction-to-programming-logic': 'code-2',
+        'math-for-ai': 'calculator',
+        'building-your-first-model': 'layers',
+        'ai-in-the-real-world': 'globe',
+        'python-for-beginners': 'code-2',
+    }
+
+    @property
+    def lucide_icon(self):
+        return self._SLUG_ICON_MAP.get(self.slug, 'book-open')
 
     def __str__(self):
         return f"Module {self.order}: {self.title}"
