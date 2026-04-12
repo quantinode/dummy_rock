@@ -57,9 +57,9 @@
         <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="#faq">FAQ</a></li>
     </ul>
-    <div class="nav-actions">
-        <a href="/login/" class="btn btn-outline">Login</a>
-        <a href="#pricing" class="btn btn-outline">Get Started</a>
+    <div class="nav-actions" data-ga-section="landing_nav">
+        <a href="/login/" class="btn btn-outline" data-ga-id="landing_nav_login">Login</a>
+        <a href="#pricing" class="btn btn-outline" data-ga-id="landing_nav_get_started">Get Started</a>
     </div>
 </nav>
 
@@ -68,7 +68,7 @@
 ═══════════════════════════════════════════════ -->
 
 <!-- Hero — image + text overlaid -->
-<section class="hero-cta-section hero-image-banner">
+<section class="hero-cta-section hero-image-banner" data-ga-section="hero">
     <div class="hero-badge">
         <div class="pulse-dot"></div>
         India's AI Platform for Class 7–12
@@ -82,8 +82,8 @@
         100+ concepts, 8 modules, 15+ hands-on labs. No downloads needed.
     </p>
     <div class="hero-btns">
-        <a href="/register/" class="btn btn-hero-primary btn-lg">Start</a>
-        <a href="#pricing" class="btn btn-hero-primary btn-lg">View Pricing</a>
+        <a href="/register/" class="btn btn-hero-primary btn-lg" data-ga-id="hero_start_register">Start</a>
+        <a href="#pricing" class="btn btn-hero-primary btn-lg" data-ga-id="hero_view_pricing">View Pricing</a>
     </div>
     <div class="hero-trust">
         <span>1000+ students enrolled</span>
@@ -293,7 +293,7 @@
 <!-- ═══════════════════════════════════════════════
      PRICING
 ═══════════════════════════════════════════════ -->
-<div id="pricing" class="section" style="background: var(--bg-secondary); max-width: 100%; padding: 100px 40px;">
+<div id="pricing" class="section" data-ga-section="pricing" style="background: var(--bg-secondary); max-width: 100%; padding: 100px 40px;">
     <div style="max-width: 1200px; margin: 0 auto;">
         <div class="section-title">
             <span class="eyebrow">Pricing</span>
@@ -315,7 +315,7 @@
                     <li>XP, badges &amp; leaderboard</li>
                     <li>Learning path tracking</li>
                 </ul>
-                <a href="/register/" class="btn btn-outline" style="width:100%; justify-content:center;">Get Started — Rs. 799/mo</a>
+                <a href="/register/" class="btn btn-outline" data-ga-id="pricing_monthly_register" data-ga-label="Get Started Monthly Plan" style="width:100%; justify-content:center;">Get Started — Rs. 799/mo</a>
             </div>
             <!-- 3-Month Plan -->
             <div class="pricing-card">
@@ -331,7 +331,7 @@
                     <li>Learning path tracking</li>
                     <li>Priority support</li>
                 </ul>
-                <a href="/register/" class="btn btn-outline" style="width:100%; justify-content:center;">Get Started — Rs. 1,999/3 mo</a>
+                <a href="/register/" class="btn btn-outline" data-ga-id="pricing_quarterly_register" data-ga-label="Get Started Three Month Plan" style="width:100%; justify-content:center;">Get Started — Rs. 1,999/3 mo</a>
             </div>
         </div>
     </div>
@@ -340,7 +340,7 @@
 <!-- ═══════════════════════════════════════════════
      SCHOOL INQUIRY FORM
 ═══════════════════════════════════════════════ -->
-<div id="inquiry" class="inquiry-section">
+<div id="inquiry" class="inquiry-section" data-ga-section="school_inquiry">
     <div class="section">
         <div class="section-title">
             <span class="eyebrow">Get Started</span>
@@ -353,7 +353,7 @@
                 {% for message in messages %}{{ message }}{% endfor %}
             </div>
             {% endif %}
-            <form method="POST" action="/#inquiry">
+            <form method="POST" action="/#inquiry" data-ga-form="school_inquiry_form" data-ga-section="school_inquiry">
                 {% csrf_token %}
                 <div class="form-grid">
                     <div class="form-group">
@@ -396,7 +396,7 @@
                         {{ form.message }}
                     </div>
                 </div>
-                <button type="submit" class="btn btn-outline btn-lg" style="width: 100%; justify-content: center;">
+                <button type="submit" class="btn btn-outline btn-lg" data-ga-id="school_inquiry_submit" style="width: 100%; justify-content: center;">
                     Submit Inquiry — We'll contact you within 24 hrs
                 </button>
             </form>
@@ -446,18 +446,18 @@
                 <li><a href="#features">Features</a></li>
                 <li><a href="#pricing">Pricing</a></li>
                 <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="/login/">Student Login</a></li>
-                <li><a href="/register/">Register Free</a></li>
+                <li><a href="/login/" data-ga-id="footer_student_login">Student Login</a></li>
+                <li><a href="/register/" data-ga-id="footer_register_free">Register Free</a></li>
             </ul>
         </div>
         <div class="footer-col">
             <h4>Contact</h4>
             <ul>
                 <li><a href="tel:+917999989794">+91 79999 89794</a></li>
-                <li><a href="https://wa.me/917999989794" target="_blank" rel="noopener">WhatsApp Us</a></li>
+                <li><a href="https://wa.me/917999989794" target="_blank" rel="noopener" data-ga-id="footer_whatsapp">WhatsApp Us</a></li>
                 <li><a href="mailto:quantinodes@gmail.com">quantinodes@gmail.com</a></li>
                 <li><a href="mailto:info@quantinodes.com">info@quantinodes.com</a></li>
-                <li><a href="#inquiry">Contact Form</a></li>
+                <li><a href="#inquiry" data-ga-id="footer_contact_form">Contact Form</a></li>
             </ul>
         </div>
     </div>
@@ -470,7 +470,7 @@
 <!-- ═══════════════════════════════════════════════
      FLOATING WHATSAPP BUTTON
 ═══════════════════════════════════════════════ -->
-<a href="https://wa.me/917999989794" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+<a href="https://wa.me/917999989794" class="whatsapp-float" data-ga-id="floating_whatsapp_chat" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
     </svg>

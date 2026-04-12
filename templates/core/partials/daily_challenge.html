@@ -1,5 +1,5 @@
 <!-- Daily Challenge Widget -->
-<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;">
+<div data-ga-section="dashboard_daily_challenge" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
         <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);">⚡ Daily Challenge</div>
         {% if challenge_done %}
@@ -17,6 +17,7 @@
     {% endif %}
     {% if not challenge_done %}
     <a href="{% if daily_challenge.target_module %}/dashboard/learn/{{ daily_challenge.target_module.slug }}/{% else %}/dashboard/glossary/{% endif %}"
+       data-ga-id="{% if daily_challenge.target_module %}dashboard_daily_challenge_{{ daily_challenge.target_module.slug }}{% else %}dashboard_daily_challenge_glossary{% endif %}"
        class="btn btn-green" style="font-size:13px;padding:8px 18px;">Go to Challenge →</a>
     {% else %}
     <div style="font-size:13px;color:var(--accent-green);font-weight:600;">✓ Challenge completed today!</div>

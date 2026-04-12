@@ -1,8 +1,8 @@
 <!-- Mini Leaderboard (top 5) -->
-<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;">
+<div data-ga-section="dashboard_mini_leaderboard" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
         <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);">🏆 Leaderboard</div>
-        <a href="/dashboard/leaderboard/" style="font-size:12px;color:var(--accent-blue);text-decoration:none;">View all</a>
+        <a href="/dashboard/leaderboard/" data-ga-id="dashboard_mini_leaderboard_view_all" style="font-size:12px;color:var(--accent-blue);text-decoration:none;">View all</a>
     </div>
     {% if top_users %}
     <div style="display:flex;flex-direction:column;gap:8px;">

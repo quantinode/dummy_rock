@@ -6,6 +6,15 @@
             .slice(0, 120);
     }
 
+    function slugify(value) {
+        return normalizeText(value)
+            .toLowerCase()
+            .replace(/['"]/g, '')
+            .replace(/[^a-z0-9]+/g, '_')
+            .replace(/^_+|_+$/g, '')
+            .slice(0, 100);
+    }
+
     function getPagePath() {
         return window.location.pathname + window.location.search;
     }
@@ -64,6 +73,21 @@
         return normalizeText(element.tagName || 'element').toLowerCase();
     }
 
+    function getRelevantClasses(element) {
+        if (!element || !element.classList) {
+            return '';
+        }
+
+        var classes = [];
+        Array.prototype.forEach.call(element.classList, function (className) {
+            if (/^(btn|cta|hero|pricing|whatsapp|send-btn|lab-card|classroom-card)/.test(className)) {
+                classes.push(className);
+            }
+        });
+
+        return normalizeText(classes.join(' '));
+    }
+
     function getSectionName(element) {
         var current = element;
 
@@ -96,6 +120,19 @@
             actionPath ||
             'form'
         );
+    }
+
+    function getElementPosition(element) {
+        if (!element || !element.parentElement) {
+            return '';
+        }
+
+        var siblings = Array.prototype.filter.call(element.parentElement.children, function (child) {
+            return child.tagName === element.tagName;
+        });
+        var index = siblings.indexOf(element);
+
+        return index > -1 ? String(index + 1) : '';
     }
 
     function toUrl(href) {
@@ -138,6 +175,140 @@
         }
 
         return '';
+    }
+
+    function isCtaElement(element) {
+        if (!element) {
+            return false;
+        }
+
+        if (element.hasAttribute('data-ga-id')) {
+            return true;
+        }
+
+        var tagName = element.tagName;
+        var classNames = element.className || '';
+
+        if (tagName === 'BUTTON' || tagName === 'INPUT') {
+            return true;
+        }
+
+        if (tagName === 'A') {
+            return (
+                element.getAttribute('role') === 'button' ||
+                /\b(btn|cta|whatsapp-float|send-btn|lab-card|classroom-card)\b/.test(classNames)
+            );
+        }
+
+        return false;
+    }
+
+    function getElementDestination(element, url) {
+        if (!element) {
+            return '';
+        }
+
+        if (element.tagName === 'A' && url) {
+            if (url.origin === window.location.origin) {
+                return url.pathname + url.search + url.hash;
+            }
+
+            return url.href;
+        }
+
+        var form = element.form || (typeof element.closest === 'function' ? element.closest('form') : null);
+        if (form) {
+            var actionUrl = toUrl(form.getAttribute('action') || window.location.href);
+            if (actionUrl) {
+                return actionUrl.pathname + actionUrl.search;
+            }
+        }
+
+        return normalizeText(
+            element.getAttribute('data-ga-destination') ||
+            element.getAttribute('onclick') ||
+            element.name ||
+            element.id ||
+            ''
+        );
+    }
+
+    function getCtaVariant(element) {
+        return normalizeText(
+            element.getAttribute('data-ga-variant') ||
+            getRelevantClasses(element) ||
+            'default'
+        );
+    }
+
+    function getCtaKind(element, url) {
+        if (!element) {
+            return 'cta';
+        }
+
+        if (element.tagName === 'A') {
+            if (!url) {
+                return 'link';
+            }
+
+            if (url.protocol === 'mailto:' || url.protocol === 'tel:') {
+                return 'contact';
+            }
+
+            if (hrefIsAnchor(element)) {
+                return 'anchor';
+            }
+
+            if (url.origin !== window.location.origin) {
+                return 'outbound';
+            }
+
+            return 'navigation';
+        }
+
+        var type = normalizeText(element.type || element.getAttribute('type') || 'button').toLowerCase();
+        return type === 'submit' ? 'submit' : 'button';
+    }
+
+    function hrefIsAnchor(element) {
+        var href = element && element.getAttribute ? element.getAttribute('href') : '';
+        return Boolean(href && href.charAt(0) === '#');
+    }
+
+    function getCtaId(element, url) {
+        if (!element) {
+            return 'cta';
+        }
+
+        var explicitId = element.getAttribute('data-ga-id');
+        if (explicitId) {
+            return slugify(explicitId) || 'cta';
+        }
+
+        var generatedId = slugify([
+            getPageType(window.location.pathname),
+            getSectionName(element),
+            getElementLabel(element),
+            getElementDestination(element, url),
+            getElementPosition(element)
+        ].join(' '));
+
+        return generatedId || slugify(element.tagName || 'cta') || 'cta';
+    }
+
+    function getCtaParams(element, url) {
+        var destination = getElementDestination(element, url);
+
+        return {
+            cta_id: getCtaId(element, url),
+            cta_label: getElementLabel(element),
+            cta_section: getSectionName(element),
+            cta_destination: destination,
+            cta_variant: getCtaVariant(element),
+            cta_kind: getCtaKind(element, url),
+            cta_position: getElementPosition(element),
+            cta_source: element.hasAttribute('data-ga-id') ? 'explicit' : 'auto'
+        };
     }
 
     function trackPageView() {
@@ -252,6 +423,9 @@
 
             var actionUrl = toUrl(form.getAttribute('action') || window.location.href);
             var actionPath = actionUrl ? (actionUrl.pathname + actionUrl.search) : getPagePath();
+            var submitter = event.submitter || null;
+            var submitterUrl = submitter && submitter.tagName === 'A' ? toUrl(submitter.getAttribute('href')) : null;
+            var ctaParams = submitter ? getCtaParams(submitter, submitterUrl) : {};
 
             track('form_submit', {
                 form_name: getFormName(form),
@@ -260,7 +434,13 @@
                 form_action: actionPath,
                 section_name: getSectionName(form),
                 page_path: getPagePath(),
-                page_type: getPageType(window.location.pathname)
+                page_type: getPageType(window.location.pathname),
+                cta_id: ctaParams.cta_id || '',
+                cta_label: ctaParams.cta_label || '',
+                cta_variant: ctaParams.cta_variant || '',
+                cta_position: ctaParams.cta_position || '',
+                submitter_text: submitter ? getElementLabel(submitter) : '',
+                submitter_id: ctaParams.cta_id || ''
             });
         });
     }
@@ -280,7 +460,7 @@
                 return;
             }
 
-            var element = target.closest('a, button, input[type="button"], input[type="submit"]');
+            var element = target.closest('[data-ga-id], [data-ga-event], a, button, input[type="button"], input[type="submit"]');
             if (!element) {
                 return;
             }
@@ -304,6 +484,29 @@
                 }
 
                 var contactMethod = getContactMethod(url);
+                if (isCtaElement(element)) {
+                    track(element.getAttribute('data-ga-event') || 'cta_click', {
+                        click_label: baseParams.click_label,
+                        section_name: baseParams.section_name,
+                        page_path: baseParams.page_path,
+                        page_type: baseParams.page_type,
+                        destination: getElementDestination(element, url),
+                        contact_method: contactMethod,
+                        link_domain: url.hostname,
+                        file_name: isDownloadLink(element, url) ? normalizeText(url.pathname.split('/').pop()) : '',
+                        file_extension: isDownloadLink(element, url) ? normalizeText(url.pathname.split('.').pop()).toLowerCase() : '',
+                        cta_id: getCtaId(element, url),
+                        cta_label: getElementLabel(element),
+                        cta_section: getSectionName(element),
+                        cta_destination: getElementDestination(element, url),
+                        cta_variant: getCtaVariant(element),
+                        cta_kind: getCtaKind(element, url),
+                        cta_position: getElementPosition(element),
+                        cta_source: element.hasAttribute('data-ga-id') ? 'explicit' : 'auto'
+                    });
+                    return;
+                }
+
                 if (contactMethod) {
                     track('contact_click', {
                         contact_method: contactMethod,
@@ -367,11 +570,19 @@
                 return;
             }
 
-            track('cta_click', {
+            track(element.getAttribute('data-ga-event') || 'cta_click', {
                 click_label: baseParams.click_label,
                 section_name: baseParams.section_name,
                 page_path: baseParams.page_path,
-                page_type: baseParams.page_type
+                page_type: baseParams.page_type,
+                cta_id: getCtaId(element, null),
+                cta_label: getElementLabel(element),
+                cta_section: getSectionName(element),
+                cta_destination: getElementDestination(element, null),
+                cta_variant: getCtaVariant(element),
+                cta_kind: getCtaKind(element, null),
+                cta_position: getElementPosition(element),
+                cta_source: element.hasAttribute('data-ga-id') ? 'explicit' : 'auto'
             });
         });
     }

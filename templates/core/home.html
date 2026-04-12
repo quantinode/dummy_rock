@@ -337,7 +337,7 @@
     <div>
 
         <!-- Personalized Greeting -->
-        <div style="background:linear-gradient(135deg,rgba(0,168,84,0.08),rgba(21,101,192,0.08));border:1px solid var(--border);border-radius:20px;padding:28px 32px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+        <div data-ga-section="dashboard_welcome" style="background:linear-gradient(135deg,rgba(0,168,84,0.08),rgba(21,101,192,0.08));border:1px solid var(--border);border-radius:20px;padding:28px 32px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
             <div>
                 <div style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Welcome back</div>
                 <div style="font-size:26px;font-weight:800;color:var(--text-primary);line-height:1.2;">
@@ -350,7 +350,7 @@
                 <div style="margin-top:6px;font-size:13px;color:var(--text-secondary);">Ready to learn something new today?</div>
                 {% endif %}
             </div>
-            <a href="/dashboard/ai-chat/" style="display:inline-flex;align-items:center;gap:8px;background:var(--accent-green);color:#fff;font-weight:700;font-size:13px;padding:10px 20px;border-radius:10px;text-decoration:none;white-space:nowrap;">
+            <a href="/dashboard/ai-chat/" data-ga-id="dashboard_welcome_ai_assistant" style="display:inline-flex;align-items:center;gap:8px;background:var(--accent-green);color:#fff;font-weight:700;font-size:13px;padding:10px 20px;border-radius:10px;text-decoration:none;white-space:nowrap;">
                 Ask AI Assistant
             </a>
         </div>
@@ -381,19 +381,19 @@
             <p>A structured journey from foundational logic to advanced AI systems.</p>
         </div>
 
-        <div class="grade-selector">
-            <a href="/dashboard/" class="grade-option {% if not current_grade %}active{% endif %}">All Classes</a>
-            <a href="/dashboard/?grade=7" class="grade-option {% if current_grade == '7' %}active{% endif %}">Class 7</a>
-            <a href="/dashboard/?grade=8" class="grade-option {% if current_grade == '8' %}active{% endif %}">Class 8</a>
-            <a href="/dashboard/?grade=9" class="grade-option {% if current_grade == '9' %}active{% endif %}">Class 9</a>
-            <a href="/dashboard/?grade=10" class="grade-option {% if current_grade == '10' %}active{% endif %}">Class 10</a>
-            <a href="/dashboard/?grade=11" class="grade-option {% if current_grade == '11' %}active{% endif %}">Class 11</a>
-            <a href="/dashboard/?grade=12" class="grade-option {% if current_grade == '12' %}active{% endif %}">Class 12</a>
+        <div class="grade-selector" data-ga-section="dashboard_grade_filter">
+            <a href="/dashboard/" class="grade-option {% if not current_grade %}active{% endif %}" data-ga-id="dashboard_grade_all">All Classes</a>
+            <a href="/dashboard/?grade=7" class="grade-option {% if current_grade == '7' %}active{% endif %}" data-ga-id="dashboard_grade_7">Class 7</a>
+            <a href="/dashboard/?grade=8" class="grade-option {% if current_grade == '8' %}active{% endif %}" data-ga-id="dashboard_grade_8">Class 8</a>
+            <a href="/dashboard/?grade=9" class="grade-option {% if current_grade == '9' %}active{% endif %}" data-ga-id="dashboard_grade_9">Class 9</a>
+            <a href="/dashboard/?grade=10" class="grade-option {% if current_grade == '10' %}active{% endif %}" data-ga-id="dashboard_grade_10">Class 10</a>
+            <a href="/dashboard/?grade=11" class="grade-option {% if current_grade == '11' %}active{% endif %}" data-ga-id="dashboard_grade_11">Class 11</a>
+            <a href="/dashboard/?grade=12" class="grade-option {% if current_grade == '12' %}active{% endif %}" data-ga-id="dashboard_grade_12">Class 12</a>
         </div>
 
-        <div class="module-premium-grid">
+        <div class="module-premium-grid" data-ga-section="dashboard_modules">
             {% for module in modules %}
-            <div class="module-premium-card card-hover-lift" onclick="window.location='/dashboard/learn/{{ module.slug }}/';" data-animate>
+            <div class="module-premium-card card-hover-lift" onclick="window.location='/dashboard/learn/{{ module.slug }}/';" data-animate data-ga-id="dashboard_module_{{ module.slug }}" data-ga-label="{{ module.title }}" data-ga-destination="/dashboard/learn/{{ module.slug }}/" data-ga-variant="module_card">
                 <div class="module-accent-line" style="background: {{ module.color|default:'#4d96ff' }};"></div>
                 <div class="module-inner">
                     <div class="module-meta">
@@ -426,9 +426,9 @@
             <p>Practice with industrial-grade AI visualization tools.</p>
         </div>
 
-        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-bottom: 60px;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-bottom: 60px;" data-ga-section="dashboard_labs">
             {% for lab in labs %}
-            <a href="{{ lab.url }}" data-animate class="lab-card card-hover-lift">
+            <a href="{{ lab.url }}" data-animate class="lab-card card-hover-lift" data-ga-id="dashboard_lab_{{ lab.name }}" data-ga-label="{{ lab.name }}">
                 <div class="lab-icon-wrap" style="background:{{ lab.color }};"><i data-lucide="{{ lab.icon }}"></i></div>
                 <div class="lab-name">{{ lab.name }}</div>
                 <div class="lab-desc">{{ lab.desc }}</div>
@@ -451,7 +451,7 @@
 <!-- ═══════════════════════════════════════════════
      LOGGED-OUT HERO — simple CTA
 ═══════════════════════════════════════════════ -->
-<div class="hero-section">
+<div class="hero-section" data-ga-section="dashboard_logged_out_hero">
     <div class="hero-content">
         <div class="hero-badge">
             <div class="pulse-dot"></div>
@@ -460,8 +460,8 @@
         <h1>AI Lab<br><span>The Future of Learning</span></h1>
         <p>Master Artificial Intelligence through high-fidelity simulations, guided learning paths, and real-world experiments.</p>
         <div class="hero-btns">
-            <a href="/register/" class="btn btn-green" style="padding: 16px 32px; font-size: 16px;">Start Free</a>
-            <a href="/" class="btn btn-secondary" style="padding: 16px 32px; font-size: 16px;">For Schools</a>
+            <a href="/register/" class="btn btn-green" data-ga-id="dashboard_logged_out_start_free" style="padding: 16px 32px; font-size: 16px;">Start Free</a>
+            <a href="/" class="btn btn-secondary" data-ga-id="dashboard_logged_out_for_schools" style="padding: 16px 32px; font-size: 16px;">For Schools</a>
         </div>
     </div>
 </div>
@@ -490,19 +490,19 @@
     <p>A structured journey from foundational logic to advanced AI systems.</p>
 </div>
 
-<div class="grade-selector">
-    <a href="/dashboard/" class="grade-option {% if not current_grade %}active{% endif %}">All Classes</a>
-    <a href="/dashboard/?grade=7" class="grade-option {% if current_grade == '7' %}active{% endif %}">Class 7</a>
-    <a href="/dashboard/?grade=8" class="grade-option {% if current_grade == '8' %}active{% endif %}">Class 8</a>
-    <a href="/dashboard/?grade=9" class="grade-option {% if current_grade == '9' %}active{% endif %}">Class 9</a>
-    <a href="/dashboard/?grade=10" class="grade-option {% if current_grade == '10' %}active{% endif %}">Class 10</a>
-    <a href="/dashboard/?grade=11" class="grade-option {% if current_grade == '11' %}active{% endif %}">Class 11</a>
-    <a href="/dashboard/?grade=12" class="grade-option {% if current_grade == '12' %}active{% endif %}">Class 12</a>
+<div class="grade-selector" data-ga-section="dashboard_grade_filter">
+    <a href="/dashboard/" class="grade-option {% if not current_grade %}active{% endif %}" data-ga-id="dashboard_grade_all">All Classes</a>
+    <a href="/dashboard/?grade=7" class="grade-option {% if current_grade == '7' %}active{% endif %}" data-ga-id="dashboard_grade_7">Class 7</a>
+    <a href="/dashboard/?grade=8" class="grade-option {% if current_grade == '8' %}active{% endif %}" data-ga-id="dashboard_grade_8">Class 8</a>
+    <a href="/dashboard/?grade=9" class="grade-option {% if current_grade == '9' %}active{% endif %}" data-ga-id="dashboard_grade_9">Class 9</a>
+    <a href="/dashboard/?grade=10" class="grade-option {% if current_grade == '10' %}active{% endif %}" data-ga-id="dashboard_grade_10">Class 10</a>
+    <a href="/dashboard/?grade=11" class="grade-option {% if current_grade == '11' %}active{% endif %}" data-ga-id="dashboard_grade_11">Class 11</a>
+    <a href="/dashboard/?grade=12" class="grade-option {% if current_grade == '12' %}active{% endif %}" data-ga-id="dashboard_grade_12">Class 12</a>
 </div>
 
-<div class="module-premium-grid">
+<div class="module-premium-grid" data-ga-section="dashboard_modules">
     {% for module in modules %}
-    <div class="module-premium-card card-hover-lift" onclick="window.location='/dashboard/learn/{{ module.slug }}/';" data-animate>
+    <div class="module-premium-card card-hover-lift" onclick="window.location='/dashboard/learn/{{ module.slug }}/';" data-animate data-ga-id="dashboard_module_{{ module.slug }}" data-ga-label="{{ module.title }}" data-ga-destination="/dashboard/learn/{{ module.slug }}/" data-ga-variant="module_card">
         <div class="module-accent-line" style="background: {{ module.color|default:'#4d96ff' }};"></div>
         <div class="module-inner">
             <div class="module-meta">
@@ -535,9 +535,9 @@
     <p>Practice with industrial-grade AI visualization tools.</p>
 </div>
 
-<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-bottom: 100px;">
+<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-bottom: 100px;" data-ga-section="dashboard_labs">
     {% for lab in labs %}
-    <a href="{{ lab.url }}" data-animate class="lab-card card-hover-lift">
+    <a href="{{ lab.url }}" data-animate class="lab-card card-hover-lift" data-ga-id="dashboard_lab_{{ lab.name }}" data-ga-label="{{ lab.name }}">
         <div class="lab-icon-wrap" style="background:{{ lab.color }};"><i data-lucide="{{ lab.icon }}"></i></div>
         <div class="lab-name">{{ lab.name }}</div>
         <div class="lab-desc">{{ lab.desc }}</div>

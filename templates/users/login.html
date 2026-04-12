@@ -106,14 +106,14 @@
       <a href="/#pricing" style="
           display:inline-block;background:#c62828;color:#fff;font-weight:700;
           font-size:14px;padding:12px 28px;border-radius:10px;
-          text-decoration:none;">
+          text-decoration:none;" data-ga-id="login_view_renewal_plans">
         View Renewal Plans →
       </a>
     </div>
     {% endif %}
     {% endif %}
 
-    <form method="post">
+    <form method="post" data-ga-form="login_form" data-ga-section="login_form">
       {% csrf_token %}
       <input type="hidden" name="next" value="{{ next }}">
       <div class="field">
@@ -124,13 +124,13 @@
         <label for="password">Password</label>
         <input type="password" id="password" name="password" placeholder="••••••••" required>
       </div>
-      <button type="submit" class="btn-login">Sign In</button>
+      <button type="submit" class="btn-login" data-ga-id="login_submit">Sign In</button>
     </form>
 
     <p class="switch-link" style="margin-top:16px;">
-      <a href="{% url 'password_reset' %}" style="color:var(--text-muted);font-size:0.85rem;">Forgot password?</a>
+      <a href="{% url 'password_reset' %}" data-ga-id="login_forgot_password" style="color:var(--text-muted);font-size:0.85rem;">Forgot password?</a>
     </p>
-    <p class="switch-link">Don't have an account? <a href="{% url 'register_page' %}">Sign up</a></p>
+    <p class="switch-link">Don't have an account? <a href="{% url 'register_page' %}" data-ga-id="login_sign_up">Sign up</a></p>
   </div>
 </div>
 {% endblock %}
