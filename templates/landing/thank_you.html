@@ -6,6 +6,7 @@
     <title>Thank You — Quantinodes</title>
     {% load static %}
     <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+    {% include 'partials/analytics.html' %}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/landing.css' %}">
     <style>
@@ -62,9 +63,9 @@
             </ul>
         </div>
 
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <a href="/" class="btn btn-outline">Back to Home</a>
-            <a href="/register/" class="btn btn-hero-primary">Create Account</a>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;" data-ga-section="thank_you_actions">
+            <a href="/" class="btn btn-outline" data-ga-id="thank_you_back_home">Back to Home</a>
+            <a href="/register/" class="btn btn-hero-primary" data-ga-id="thank_you_create_account">Create Account</a>
         </div>
     </div>
 </div>

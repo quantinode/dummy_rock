@@ -132,11 +132,7 @@ def login_page(request):
     if request.method == 'POST':
         email = request.POST.get('email', '').strip()
         password = request.POST.get('password', '')
-        try:
-            user_obj = User.objects.get(email=email)
-            user = authenticate(request, username=user_obj.username, password=password)
-        except User.DoesNotExist:
-            user = None
+        user = authenticate(request, username=email, password=password)
 
         sub_expired = False
         if user is not None:

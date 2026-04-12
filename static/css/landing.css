@@ -152,23 +152,34 @@ body {
 }
 
 .btn-hero-primary {
-    background: linear-gradient(270deg, #00c466, #00a854, #00875a, #00c466);
-    background-size: 300% 100%;
-    color: #fff;
+    background: #ffffff;
+    color: #0d1f35;
     font-weight: 800;
-    border: none;
+    border: 2px solid transparent;
     letter-spacing: 0.02em;
-    animation: shimmer 4s linear infinite, glowPulse 2.5s ease-in-out infinite;
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
 }
 .btn-hero-primary:hover {
-    animation: none;
-    background: linear-gradient(135deg, #00d96e, #00a854);
-    background-size: 100% 100%;
+    background: #f0f8ff;
     transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 12px 40px rgba(0,168,84,0.6);
-    color: #fff;
+    box-shadow: 0 10px 36px rgba(0,0,0,0.35);
+    color: #0d1f35;
+}
+
+/* Second hero button — ghost outline */
+.hero-btns .btn:nth-child(2).btn-hero-primary {
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+    border: 2px solid rgba(255,255,255,0.55);
+    box-shadow: none;
+    backdrop-filter: blur(4px);
+}
+.hero-btns .btn:nth-child(2).btn-hero-primary:hover {
+    background: rgba(255,255,255,0.22);
+    border-color: #ffffff;
+    color: #ffffff;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.2);
 }
 .btn-hero-secondary {
     background: #fff;
@@ -189,47 +200,55 @@ body {
 .section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
 .section-sm { padding: 60px 40px; max-width: 1200px; margin: 0 auto; }
 
-/* ─── Hero Image Banner ─── */
+/* ─── Hero — image + text overlaid ─── */
 .hero-image-banner {
-    width: 100%;
-    height: 62vh;
-    min-height: 380px;
-    max-height: 560px;
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
-    position: relative;
-}
-/* Soft bottom fade so it blends into the CTA section */
-.hero-image-banner::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    background: linear-gradient(to bottom, transparent, var(--bg-primary));
 }
 
-/* ─── Hero CTA Section (below image, clean light bg) ─── */
 .hero-cta-section {
-    text-align: center;
-    padding: 56px 40px 72px;
-    background: var(--bg-primary);
     position: relative;
+    width: 100%;
+    min-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 40px 80px;
+}
+
+/* Dark overlay so text stays readable over the photo */
+.hero-cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(8, 24, 50, 0.55) 0%,
+        rgba(8, 24, 50, 0.70) 60%,
+        rgba(8, 24, 50, 0.82) 100%
+    );
+    z-index: 0;
+}
+
+.hero-cta-section > * {
+    position: relative;
+    z-index: 1;
 }
 
 .hero-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(0, 168, 84, 0.1);
-    border: 1px solid rgba(0, 168, 84, 0.35);
+    background: rgba(0, 168, 84, 0.18);
+    border: 1px solid rgba(0, 168, 84, 0.5);
     padding: 6px 18px;
     border-radius: 100px;
     font-size: 13px;
     font-weight: 600;
-    color: var(--accent-green);
+    color: #4cdb8e;
     margin-bottom: 28px;
 }
 
@@ -237,7 +256,7 @@ body {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--accent-green);
+    background: #4cdb8e;
     animation: pulse 2s infinite;
     flex-shrink: 0;
 }
@@ -253,11 +272,11 @@ body {
     line-height: 1.05;
     letter-spacing: -0.04em;
     margin-bottom: 20px;
-    color: var(--text-primary);
+    color: #ffffff;
 }
 
 .hero-cta-section h1 .grad {
-    background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-blue) 100%);
+    background: linear-gradient(135deg, #4cdb8e 0%, #5eb8ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -265,7 +284,7 @@ body {
 
 .hero-sub {
     font-size: clamp(15px, 2vw, 19px);
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.82);
     max-width: 620px;
     margin: 0 auto 40px;
     line-height: 1.7;
@@ -320,22 +339,22 @@ body {
     flex-wrap: wrap;
     font-size: 13px;
     font-weight: 600;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.65);
     letter-spacing: 0.01em;
 }
 .hero-trust-dot {
     width: 4px;
     height: 4px;
     border-radius: 50%;
-    background: var(--border-glow);
+    background: rgba(255, 255, 255, 0.4);
     display: inline-block;
 }
 
 @media (max-width: 640px) {
-    .hero-image-banner { height: 44vw; min-height: 220px; }
-    .hero-cta-section { padding: 40px 24px 56px; }
+    .hero-cta-section { min-height: 100svh; padding: 80px 24px 60px; }
     .hero-trust-dot { display: none; }
     .hero-trust { flex-direction: column; gap: 6px; }
+    .nav-logo-text { display: none; }
 }
 
 .hero-video {
@@ -483,34 +502,42 @@ body {
 
 .module-body { padding: 24px; }
 
-.module-tag-pill {
-    display: inline-block;
+.module-pill-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.module-tag-pill,
+.module-grade-pill {
+    display: inline-flex;
+    align-items: center;
     padding: 3px 10px;
     border-radius: 6px;
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    margin-bottom: 12px;
-    background: rgba(0, 255, 136, 0.1);
+    line-height: 1.6;
+    white-space: nowrap;
+}
+
+.module-tag-pill {
+    background: rgba(0, 168, 84, 0.12);
     color: var(--accent-green);
 }
 
 .module-grade-pill {
-    float: right;
-    padding: 3px 10px;
-    border-radius: 6px;
-    font-size: 10px;
-    font-weight: 600;
-    background: rgba(0,0,0,0.06);
-    color: var(--text-muted);
+    background: rgba(21, 101, 192, 0.1);
+    color: var(--accent-blue);
 }
 
 .module-landing-card h3 {
     font-size: 17px;
     font-weight: 700;
     margin-bottom: 8px;
-    clear: both;
 }
 
 .module-landing-card p {

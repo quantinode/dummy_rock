@@ -17,6 +17,8 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost').split(',')
+
 # Application definition
 INSTALLED_APPS = [
     'daphne',
@@ -26,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     # Third-party
     'rest_framework',
     'rest_framework_simplejwt',
@@ -97,7 +100,7 @@ CHANNEL_LAYERS = {
 # Database — reads DB_ENGINE from .env (defaults to SQLite for local dev)
 _DB_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3')
 
-if _DB_ENGINE == 'django.db.backends.sqlite3':
+if os.environ.get('USE_DB', 'sqlite') == 'sqlite':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -107,7 +110,7 @@ if _DB_ENGINE == 'django.db.backends.sqlite3':
 else:
     DATABASES = {
         'default': {
-            'ENGINE': _DB_ENGINE,
+            'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.environ.get('DB_NAME', 'ailab'),
             'USER': os.environ.get('DB_USER', 'ailab_user'),
             'PASSWORD': os.environ.get('DB_PASSWORD', ''),
