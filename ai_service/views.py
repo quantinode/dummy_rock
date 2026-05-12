@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .bedrock import get_bedrock_client, SYSTEM_PROMPTS, estimate_cost
+from .bedrock import get_llm_client, SYSTEM_PROMPTS, estimate_cost
 from . import codemunch
 
 
@@ -26,7 +26,7 @@ class AIChatView(APIView):
         messages.append({'role': 'user', 'content': message})
 
         try:
-            client = get_bedrock_client()
+            client = get_llm_client()
             system = SYSTEM_PROMPTS.get(topic, SYSTEM_PROMPTS['default'])
             result = client.chat(messages, system, max_tokens, temperature)
             cost = estimate_cost(result['input_tokens'], result['output_tokens'])
@@ -65,7 +65,7 @@ Include:
 Format with clear sections. Be concise but thorough."""
 
         try:
-            client = get_bedrock_client()
+            client = get_llm_client()
             result = client.chat(
                 [{'role': 'user', 'content': prompt}],
                 SYSTEM_PROMPTS['ai_basics'],
@@ -104,7 +104,7 @@ Return ONLY valid JSON array:
 ]"""
 
         try:
-            client = get_bedrock_client()
+            client = get_llm_client()
             result = client.chat(
                 [{'role': 'user', 'content': prompt}],
                 SYSTEM_PROMPTS['default'],
@@ -146,7 +146,7 @@ Provide:
 5. Improved version (if needed)"""
 
         try:
-            client = get_bedrock_client()
+            client = get_llm_client()
             result = client.chat(
                 [{'role': 'user', 'content': prompt}],
                 SYSTEM_PROMPTS['default'],
@@ -214,7 +214,7 @@ Please explain:
 
 Keep the explanation educational and suitable for students learning AI/ML."""
 
-            client = get_bedrock_client()
+            client = get_llm_client()
             result = client.chat(
                 [{'role': 'user', 'content': ai_prompt}],
                 SYSTEM_PROMPTS['default'],
@@ -291,7 +291,7 @@ Each tip should be 1-2 sentences. Be concrete, actionable, and motivating.
 Format: return only the 3 tips as a single paragraph separated by " · " (no numbering, no markdown)."""
 
         try:
-            client = get_bedrock_client()
+            client = get_llm_client()
             result = client.chat(
                 [{'role': 'user', 'content': prompt}],
                 system='You are a friendly AI tutor who gives concise, encouraging learning tips.',

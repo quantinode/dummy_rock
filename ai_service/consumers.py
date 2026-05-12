@@ -1,6 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .bedrock import get_bedrock_client, SYSTEM_PROMPTS, estimate_cost
+from .bedrock import get_llm_client, SYSTEM_PROMPTS, estimate_cost
 import asyncio
 
 
@@ -42,7 +42,7 @@ class AIAssistantConsumer(AsyncWebsocketConsumer):
 
             # Stream in executor to avoid blocking the event loop
             loop = asyncio.get_event_loop()
-            client = get_bedrock_client()
+            client = get_llm_client()
 
             full_text = ''
             input_tokens = len(' '.join(m['content'] for m in messages).split())  # estimate

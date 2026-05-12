@@ -181,11 +181,10 @@ CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = DEBUG  # Allow all in development
 
-# AWS Bedrock
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
-AWS_DEFAULT_REGION = os.environ.get('AWS_DEFAULT_REGION', 'ap-south-1')
-BEDROCK_MODEL_ID = os.environ.get('BEDROCK_MODEL_ID', '')
+# LLM API Keys (fallback: Groq → OpenRouter → Gemini)
+GROQ_API_KEY = os.environ.get('GROQ_API_KEY', '')
+OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY', '')
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 
 # Google OAuth
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', '')

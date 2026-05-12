@@ -1,93 +1,219 @@
 import json
-import boto3
+import requests
 from django.conf import settings
 
 
-class BedrockClient:
-    """AWS Bedrock Claude client for AI Lab"""
+class LLMClient:
+    """Multi-provider LLM client with fallback: Groq → OpenRouter → Gemini"""
 
     def __init__(self):
-        self.client = boto3.client(
-            service_name='bedrock-runtime',
-            region_name=settings.AWS_DEFAULT_REGION,
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        )
-        self.model_id = settings.BEDROCK_MODEL_ID
+        self.providers = []
+        if settings.GROQ_API_KEY:
+            self.providers.append(('groq', settings.GROQ_API_KEY))
+        if settings.OPENROUTER_API_KEY:
+            self.providers.append(('openrouter', settings.OPENROUTER_API_KEY))
+        if settings.GEMINI_API_KEY:
+            self.providers.append(('gemini', settings.GEMINI_API_KEY))
 
     def chat(self, messages: list, system: str = '', max_tokens: int = 1024,
              temperature: float = 0.7) -> dict:
-        """Send a chat request and return full response"""
-        body = {
-            'anthropic_version': 'bedrock-2023-05-31',
-            'max_tokens': max_tokens,
-            'temperature': temperature,
-            'messages': messages,
-        }
-        if system:
-            body['system'] = system
-
-        response = self.client.invoke_model(
-            modelId=self.model_id,
-            body=json.dumps(body),
-        )
-        result = json.loads(response['body'].read())
-        text = result['content'][0]['text'] if result.get('content') else ''
-        usage = result.get('usage', {})
-        return {
-            'text': text,
-            'input_tokens': usage.get('input_tokens', 0),
-            'output_tokens': usage.get('output_tokens', 0),
-            'stop_reason': result.get('stop_reason', ''),
-        }
+        """Try each provider in order until one succeeds."""
+        last_error = None
+        for provider, api_key in self.providers:
+            try:
+                if provider == 'groq':
+                    return self._call_groq(api_key, messages, system, max_tokens, temperature)
+                elif provider == 'openrouter':
+                    return self._call_openrouter(api_key, messages, system, max_tokens, temperature)
+                elif provider == 'gemini':
+                    return self._call_gemini(api_key, messages, system, max_tokens, temperature)
+            except Exception as e:
+                last_error = e
+                continue
+        raise last_error or Exception("No LLM providers configured")
 
     def stream_chat(self, messages: list, system: str = '', max_tokens: int = 1024,
                     temperature: float = 0.7):
-        """Stream responses from Bedrock — yields text chunks"""
+        """Stream from first available provider. Yields text chunks."""
+        last_error = None
+        for provider, api_key in self.providers:
+            try:
+                if provider == 'groq':
+                    yield from self._stream_groq(api_key, messages, system, max_tokens, temperature)
+                    return
+                elif provider == 'openrouter':
+                    yield from self._stream_openrouter(api_key, messages, system, max_tokens, temperature)
+                    return
+                elif provider == 'gemini':
+                    # Gemini doesn't stream easily via REST, do full call and yield
+                    result = self._call_gemini(api_key, messages, system, max_tokens, temperature)
+                    yield result['text']
+                    return
+            except Exception as e:
+                last_error = e
+                continue
+        raise last_error or Exception("No LLM providers configured")
+
+    # ─── Groq ─────────────────────────────────────────────────────────────────
+
+    def _build_messages(self, messages, system):
+        msgs = []
+        if system:
+            msgs.append({'role': 'system', 'content': system})
+        msgs.extend(messages)
+        return msgs
+
+    def _call_groq(self, api_key, messages, system, max_tokens, temperature):
+        resp = requests.post(
+            'https://api.groq.com/openai/v1/chat/completions',
+            headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'},
+            json={
+                'model': 'llama-3.1-8b-instant',
+                'messages': self._build_messages(messages, system),
+                'max_tokens': max_tokens,
+                'temperature': temperature,
+            },
+            timeout=30,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        choice = data['choices'][0]
+        usage = data.get('usage', {})
+        return {
+            'text': choice['message']['content'],
+            'input_tokens': usage.get('prompt_tokens', 0),
+            'output_tokens': usage.get('completion_tokens', 0),
+            'stop_reason': choice.get('finish_reason', ''),
+        }
+
+    def _stream_groq(self, api_key, messages, system, max_tokens, temperature):
+        resp = requests.post(
+            'https://api.groq.com/openai/v1/chat/completions',
+            headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'},
+            json={
+                'model': 'llama-3.1-8b-instant',
+                'messages': self._build_messages(messages, system),
+                'max_tokens': max_tokens,
+                'temperature': temperature,
+                'stream': True,
+            },
+            stream=True,
+            timeout=30,
+        )
+        resp.raise_for_status()
+        for line in resp.iter_lines():
+            if line:
+                line = line.decode('utf-8')
+                if line.startswith('data: ') and line != 'data: [DONE]':
+                    chunk = json.loads(line[6:])
+                    delta = chunk['choices'][0].get('delta', {})
+                    if 'content' in delta and delta['content']:
+                        yield delta['content']
+
+    # ─── OpenRouter ───────────────────────────────────────────────────────────
+
+    def _call_openrouter(self, api_key, messages, system, max_tokens, temperature):
+        resp = requests.post(
+            'https://openrouter.ai/api/v1/chat/completions',
+            headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'},
+            json={
+                'model': 'meta-llama/llama-3.1-8b-instruct:free',
+                'messages': self._build_messages(messages, system),
+                'max_tokens': max_tokens,
+                'temperature': temperature,
+            },
+            timeout=30,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        choice = data['choices'][0]
+        usage = data.get('usage', {})
+        return {
+            'text': choice['message']['content'],
+            'input_tokens': usage.get('prompt_tokens', 0),
+            'output_tokens': usage.get('completion_tokens', 0),
+            'stop_reason': choice.get('finish_reason', ''),
+        }
+
+    def _stream_openrouter(self, api_key, messages, system, max_tokens, temperature):
+        resp = requests.post(
+            'https://openrouter.ai/api/v1/chat/completions',
+            headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'},
+            json={
+                'model': 'meta-llama/llama-3.1-8b-instruct:free',
+                'messages': self._build_messages(messages, system),
+                'max_tokens': max_tokens,
+                'temperature': temperature,
+                'stream': True,
+            },
+            stream=True,
+            timeout=30,
+        )
+        resp.raise_for_status()
+        for line in resp.iter_lines():
+            if line:
+                line = line.decode('utf-8')
+                if line.startswith('data: ') and line != 'data: [DONE]':
+                    chunk = json.loads(line[6:])
+                    delta = chunk['choices'][0].get('delta', {})
+                    if 'content' in delta and delta['content']:
+                        yield delta['content']
+
+    # ─── Gemini ───────────────────────────────────────────────────────────────
+
+    def _call_gemini(self, api_key, messages, system, max_tokens, temperature):
+        # Build Gemini contents format
+        contents = []
+        for msg in messages:
+            role = 'user' if msg['role'] == 'user' else 'model'
+            contents.append({'role': role, 'parts': [{'text': msg['content']}]})
+
         body = {
-            'anthropic_version': 'bedrock-2023-05-31',
-            'max_tokens': max_tokens,
-            'temperature': temperature,
-            'messages': messages,
+            'contents': contents,
+            'generationConfig': {
+                'maxOutputTokens': max_tokens,
+                'temperature': temperature,
+            },
         }
         if system:
-            body['system'] = system
+            body['systemInstruction'] = {'parts': [{'text': system}]}
 
-        response = self.client.invoke_model_with_response_stream(
-            modelId=self.model_id,
-            body=json.dumps(body),
+        resp = requests.post(
+            f'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}',
+            headers={'Content-Type': 'application/json'},
+            json=body,
+            timeout=30,
         )
-
-        for event in response['body']:
-            chunk = json.loads(event['chunk']['bytes'])
-            if chunk.get('type') == 'content_block_delta':
-                delta = chunk.get('delta', {})
-                if delta.get('type') == 'text_delta':
-                    yield delta.get('text', '')
-            elif chunk.get('type') == 'message_delta':
-                usage = chunk.get('usage', {})
-                yield {'__meta__': True, 'output_tokens': usage.get('output_tokens', 0)}
+        resp.raise_for_status()
+        data = resp.json()
+        text = data['candidates'][0]['content']['parts'][0]['text']
+        usage = data.get('usageMetadata', {})
+        return {
+            'text': text,
+            'input_tokens': usage.get('promptTokenCount', 0),
+            'output_tokens': usage.get('candidatesTokenCount', 0),
+            'stop_reason': 'stop',
+        }
 
 
 def estimate_cost(input_tokens: int, output_tokens: int) -> float:
-    """Estimate cost for Claude Opus 4.5 on Bedrock (per token pricing estimate)"""
-    input_cost_per_1k = 0.015
-    output_cost_per_1k = 0.075
-    return round(
-        (input_tokens / 1000) * input_cost_per_1k +
-        (output_tokens / 1000) * output_cost_per_1k, 6
-    )
+    """Estimate cost — most of these providers are free/cheap, return minimal cost."""
+    return 0.0
 
 
 # Singleton client
-_bedrock_client = None
+_llm_client = None
 
 
-def get_bedrock_client() -> BedrockClient:
-    global _bedrock_client
-    if _bedrock_client is None:
-        _bedrock_client = BedrockClient()
-    return _bedrock_client
+def get_llm_client() -> LLMClient:
+    global _llm_client
+    if _llm_client is None:
+        _llm_client = LLMClient()
+    return _llm_client
+
+
+# Backward-compatible alias
+get_bedrock_client = get_llm_client
 
 
 # ─── System Prompts per AI topic ──────────────────────────────────────────────
